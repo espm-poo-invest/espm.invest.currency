@@ -14,6 +14,9 @@ import java.util.stream.StreamSupport;
 public class CurrencyService {
 
     @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
     private CurrencyRepository currencyRepository;
 
     public List<Currency> listAll() {
@@ -24,14 +27,35 @@ public class CurrencyService {
                 .collect(Collectors.toList());
     }
 
-    public Currency findBy(UUID id) {
+    public Currency findById(UUID id) {
         return currencyRepository.findById(id.toString()).map(currencyModel -> currencyModel.to()).orElse(null);
+    }
 
+    public Currency findByName(String name) {
+        return currencyRepository
+                .findByName(name)
+                .map(CurrencyModel::to)
+                .orElse(null);
     }
 
     public Currency create(Currency currency) {
-        currency.setId(UUID.randomUUID());
+        currency.setId(UUID.randomUUID().toString());
         return currencyRepository.save(new CurrencyModel(currency)).to();
+    }
+
+    public Currency findBy(String idCurrency, Date date) {
+        return currencyRepository
+                .listByCurrencyDate(idCurrency, date).stream()
+                .map(CurrencyModel::to)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<Currency> listBy(String idCurrency, Date dtInicio, Date dtFim) {
+        return currencyRepository
+                .listBy(idCurrency, dtInicio, dtFim).stream()
+                .map(CurrencyModel::to)
+                .collect(Collectors.toList());
     }
 
     public void delete(UUID id) {
