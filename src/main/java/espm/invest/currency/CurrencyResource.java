@@ -1,6 +1,7 @@
 package espm.invest.currency;
 
 import espm.invest.currency.common.controller.CurrencyController;
+import espm.invest.currency.common.datatype.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.HttpStatus;
@@ -28,20 +29,14 @@ public class CurrencyResource implements CurrencyController {
     }
 
     @Override
-    public Currency currency(@PathVariable String name) {
+    public Currency currency(String name) {
         return currencyService.findByName(name);
     }
 
     @Override
     public Currency currencyById(String id) {
-        return null;
+        return currencyService.findById(UUID.fromString(id));
     }
-
-    @Override
-    public Currency deleteById(String id) {
-        return null;
-    }
-
 
     @Override
     public Currency currency(String name, String date) {
@@ -72,6 +67,5 @@ public class CurrencyResource implements CurrencyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
 
 }
