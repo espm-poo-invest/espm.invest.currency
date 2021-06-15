@@ -32,10 +32,13 @@ public class CurrencyService {
     }
 
     public Currency findByName(String name) {
-        return currencyRepository
-                .findByName(name)
-                .map(CurrencyModel::to)
-                .orElse(null);
+        List<Currency> currencies =  StreamSupport
+                .stream(currencyRepository.findByName(name).spliterator(), false)
+                .collect(Collectors.toList())
+                .stream().map(CurrencyModel::to)
+                .collect(Collectors.toList());
+
+        return currencies.size() == 0 ? null : currencies.get(0);
     }
 
     public Currency create(Currency currency) {

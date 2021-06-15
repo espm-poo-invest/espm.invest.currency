@@ -32,6 +32,6 @@ public interface CurrencyRepository extends CrudRepository<CurrencyModel, String
             @Param("dtFim") Date dtFim
     );
 
-    @Query("SELECT m from CurrencyModel m WHERE UPPER(m.name) = UPPER(:name)")
-    Optional<CurrencyModel> findByName(@Param("name") String name);
+    @Query("SELECT m from CurrencyModel m WHERE UPPER(m.name) = UPPER(:name) ORDER BY m.date desc")
+    List<CurrencyModel> findByName(@Param("name") String name);
 }
